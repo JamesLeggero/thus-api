@@ -1,4 +1,4 @@
-require('dotenv').config()
+// require('dotenv').config()
 const express = require('express')
 const app = express()
 const path = require('path')
@@ -18,8 +18,8 @@ app.get('/', (req, res)=> {
     res.send('thus back')
 })
 
-app.post('/', (req, res) => {
-    const transformedStock = thus.retrieveStockInfo(req.body.stockName)
+app.post('/', async (req, res) => {
+    const transformedStock = await thus.retrieveStockInfo(req.body.stockName)
     res.json(transformedStock)
 })
 
