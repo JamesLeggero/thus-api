@@ -11,8 +11,6 @@ const thus = {
         const data = response.data
         const company = data.Name
         return `The company associated with ${stockName} is ${company}`
-        
-        // return 'through'
     }
 }
 
