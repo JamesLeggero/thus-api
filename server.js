@@ -1,7 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
-const Pool = require('pg').Pool
+const { Pool, Client } = require('pg')
+const pg = require('pg')
 const bodyParser = require('body-parser'); 
 const path = require('path')
 const cors = require ('cors')
@@ -11,9 +12,10 @@ const passport = require('passport')
 const thus = require('./thus')
 
 const PORT = process.env.PORT || 3001
-const { PG_POOL_DB, PG_POOL_PW } = process.env
+const { PG_POOL_DB, PG_POOL_PW, PG_POOL_USER, PG_URI } = process.env
+
 const pool = new Pool({
-    user: 'postgres', 
+    user: PG_POOL_USER, 
     host: 'localhost', 
     database: PG_POOL_DB, 
     password: PG_POOL_PW, 
@@ -21,17 +23,23 @@ const pool = new Pool({
     port: 5432
 })
 
-pool.connect((err, client, release) => {
-    if (err) {
-        return console.error('Error acquiring client', err.stack)
-    }
-    client.query('SELECT NOW()', (err, result) => {
-        release()
-        if (err) {
-            return console.error('Error executing query', err.stack)
-        }
-        console.log('connected to ' + PG_POOL_DB)
-    })
+// pool.connect((err, client, release) => {
+//     if (err) {
+//         return console.error('Error acquiring client', err.stack)
+//     }
+//     client.query('SELECT NOW()', (err, result) => {
+//         release()
+//         if (err) {
+//             return console.error('Error executing query', err.stack)
+//         }
+//         console.log('connected to ' + PG_POOL_DB)
+//     })
+// })
+
+const client = new pg.Client(PG_URI)
+
+client.connect(()=> {
+    console.log(`connected to ${PG_POOL_DB}`)
 })
 
 
